@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ath10k-firmware
-PKG_SOURCE_DATE:=2017-01-11
-PKG_SOURCE_VERSION:=ab432c60437931a165f0aff1a6e3371f358b75dd
-PKG_MIRROR_HASH:=e3188ecd4d7470d3cdde89fefa6258f9ec4f404b23558d1474e5014679b28101
+PKG_SOURCE_DATE:=2017-02-15
+PKG_SOURCE_VERSION:=8d15818b0f9c7b09f743538ac2d3e1409779f52a
+PKG_MIRROR_HASH:=b37ee20143543ca4cdd230f1f9030162cbd78ed4e6b7e15bb0f852037b48d877
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
@@ -186,6 +186,13 @@ $(Package/ath10k-firmware-default)
   CATEGORY:=Firmware
 endef
 
+define Package/ath10k-firmware-qca4019
+$(Package/ath10k-firmware-default)
+  TITLE:=ath10k firmware for IPQ/QCA4019 devices
+  SECTION:=firmware
+  CATEGORY:=Firmware
+endef
+
 define Package/ath10k-firmware-qca6174
 $(Package/ath10k-firmware-default)
   TITLE:=ath10k firmware for QCA6174 devices
@@ -229,6 +236,16 @@ $(eval $(call Download,ath10k-qca9984-firmware))
 
 define Build/Compile
 
+endef
+
+define Package/ath10k-firmware-qca4019/install
+	$(INSTALL_DIR) $(1)/lib/firmware/ath10k/QCA4019/hw1.0
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/QCA4019/hw1.0/board-2.bin \
+		$(1)/lib/firmware/ath10k/QCA4019/hw1.0/
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/QCA4019/hw1.0/3.2.1/firmware-5.bin_10.4-3.2.1-00051 \
+		$(1)/lib/firmware/ath10k/QCA4019/hw1.0/firmware-5.bin
 endef
 
 define Package/ath10k-firmware-qca9887/install
@@ -333,6 +350,7 @@ $(eval $(call BuildPackage,ath10k-firmware-qca988x))
 $(eval $(call BuildPackage,ath10k-firmware-qca99x0))
 $(eval $(call BuildPackage,ath10k-firmware-qca6174))
 $(eval $(call BuildPackage,ath10k-firmware-qca9984))
+$(eval $(call BuildPackage,ath10k-firmware-qca4019))
 
 $(eval $(call BuildPackage,ath10k-firmware-qca9887-ct))
 $(eval $(call BuildPackage,ath10k-firmware-qca988x-ct))
